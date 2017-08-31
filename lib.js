@@ -13,23 +13,31 @@ const cart =
   })
 
 const listedPrice =
-  listing =>
+  listings =>
     name =>
-      name === listing.name
-        ? listing.price
-        : 0
-
+      listings.reduce((previous, listing) =>
+        name === listing.name ? previous + listing.price : previous + 0
+, 0)
 /**
  * transform carts into an array of { customer, total }
  */
 const calculateTotals =
   listings =>
-    carts => {
-      // TODO
-    }
+    carts =>
+      carts.reduce(
+        (acc, curr) => 
+          acc.concat(
+            {
+              'customer': curr.customer,
+              'total': curr.items.reduce((accum, current) => accum + listedPrice(listings)(current), 0)
+            }
+          )
+        , [])
+
 
 module.exports = {
   listing,
   cart,
   calculateTotals
 }
+
